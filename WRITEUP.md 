@@ -1,0 +1,26 @@
+ 1. AI vs. Rules
+
+AI is used to extract structured information from proposal documents, including relevant facts and supporting evidence. PDF text extraction, data validation, mandatory requirement checks, weighted score calculation, and ranking are handled through backend code and predefined rules.
+
+I drew the line based on the nature of each task. AI is useful for understanding unstructured proposal documents, where information can be expressed in different ways and requires contextual interpretation. However, calculations, eligibility checks, and ranking follow predefined criteria and must produce consistent, predictable results. Therefore, I kept these decisions in backend logic rather than relying on AI.
+
+2. Consistency and Explainability
+To improve consistency, the system uses fixed prompts, structured AI outputs, versioned criteria, and predefined scoring formulas. Extracted data is stored and reused if the same criteria version is used instead of repeatedly processing the same proposals.
+
+Using the same verified data, criteria version, and scoring logic will produce the same scores and rankings. Reviewers can see criterion-wise scores, weights, score contributions, evidence quotes to understand each result.
+3. Human in the Loop
+Reviewers can inspect proposals against their original PDFs and update their evaluation status and message when necessary. They can then send eligible proposals to the admin, who makes the final approval or rejection decision.
+
+The audit log records important events, including proposal uploads, AI extraction, evaluation, reviewer changes, submission to admin, and admin decisions. Each entry includes the action, user or system responsible, timestamp, and relevant changes.
+4. Changing Criteria
+Every criteria update creates a new version containing the updated requirements and weights. Each evaluation stores the criteria version used to generate its results, preserving previous evaluation records.
+
+When a reviewer opens a proposal, the backend compares the evaluation's criteria version with the project's active criteria version. If they differ, the system notifies the reviewer and provides an option to re-evaluate the proposal using the latest criteria.
+
+The latest evaluation is displayed by default, while previous evaluations remain available in the evaluation history.
+5. Risks
+- Incorrect extraction: Preserve evidence quotes so reviewers can check information against the original PDF.
+- Bias: Use predefined criteria and weights rather than allowing AI to make unrestricted decisions.
+- Manipulation: Validate uploaded data and calculate scores on the backend using controlled rules.
+- High AI costs: Use one AI extraction call per proposal and reuse stored extraction results instead of repeatedly processing documents.
+- Inconsistent results: Store criteria versions, prompts, model information, and evaluation results to support reproducibility.
